@@ -1,7 +1,9 @@
 package id.rivasyafri.learning.domain.value.objects;
 
-public class RestaurantId extends BaseId<UUIDv7> {
-  protected RestaurantId(UUIDv7 value) {
+import java.util.UUID;
+
+public class RestaurantId extends BaseId<UUID> {
+  protected RestaurantId(UUID value) {
     super(value);
   }
 }

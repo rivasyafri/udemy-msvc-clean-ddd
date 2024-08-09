@@ -1,7 +1,9 @@
 package id.rivasyafri.learning.domain.value.objects;
 
-public class CustomerId extends BaseId<UUIDv7> {
-  protected CustomerId(UUIDv7 value) {
+import java.util.UUID;
+
+public class CustomerId extends BaseId<UUID> {
+  protected CustomerId(UUID value) {
     super(value);
   }
 }
