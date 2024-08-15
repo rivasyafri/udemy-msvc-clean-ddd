@@ -3,10 +3,10 @@ package com.food.ordering.system.order.service.domain.entity;
 import id.rivasyafri.learning.domain.entity.AggregateRoot;
 import id.rivasyafri.learning.domain.value.objects.RestaurantId;
 
-import java.util.List;
+import java.util.Map;
 
 public class Restaurant extends AggregateRoot<RestaurantId> {
-  private final List<Product> products;
+  private final Map<Product, Product> products;
   private boolean active;
 
   private Restaurant(Builder builder) {
@@ -16,7 +16,7 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
   }
 
 
-  public List<Product> getProducts() {
+  public Map<Product, Product> getProducts() {
     return products;
   }
 
@@ -26,7 +26,7 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
 
   public static final class Builder {
     private RestaurantId restaurantId;
-    private List<Product> products;
+    private Map<Product, Product> products;
     private boolean active;
 
     private Builder() {
@@ -41,7 +41,7 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
       return this;
     }
 
-    public Builder products(List<Product> val) {
+    public Builder products(Map<Product, Product> val) {
       products = val;
       return this;
     }

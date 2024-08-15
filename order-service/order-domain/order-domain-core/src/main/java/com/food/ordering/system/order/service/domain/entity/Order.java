@@ -8,13 +8,14 @@ import id.rivasyafri.learning.domain.entity.AggregateRoot;
 import id.rivasyafri.learning.domain.value.objects.*;
 
 import java.util.List;
+import java.util.Set;
 
 public class Order extends AggregateRoot<OrderId> {
   private final CustomerId customerId;
   private final RestaurantId restaurantId;
   private final StreetAddress deliveryAddress;
   private final Money price;
-  private final List<OrderItem> items;
+  private final Set<OrderItem> items;
 
   private TrackingId trackingId;
   private OrderStatus orderStatus;
@@ -139,7 +140,7 @@ public class Order extends AggregateRoot<OrderId> {
     return price;
   }
 
-  public List<OrderItem> getItems() {
+  public Set<OrderItem> getItems() {
     return items;
   }
 
@@ -161,7 +162,7 @@ public class Order extends AggregateRoot<OrderId> {
     private RestaurantId restaurantId;
     private StreetAddress deliveryAddress;
     private Money price;
-    private List<OrderItem> items;
+    private Set<OrderItem> items;
     private TrackingId trackingId;
     private OrderStatus orderStatus;
     private List<String> failureMessages;
@@ -198,7 +199,7 @@ public class Order extends AggregateRoot<OrderId> {
       return this;
     }
 
-    public Builder items(List<OrderItem> val) {
+    public Builder items(Set<OrderItem> val) {
       items = val;
       return this;
     }
