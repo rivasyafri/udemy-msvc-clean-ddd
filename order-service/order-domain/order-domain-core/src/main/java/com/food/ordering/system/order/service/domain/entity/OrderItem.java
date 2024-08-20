@@ -31,6 +31,10 @@ public class OrderItem extends BaseEntity<OrderItemId> {
     subTotal = builder.subTotal;
   }
 
+  public static Builder builder() {
+    return new Builder();
+  }
+
   public OrderId getOrderId() {
     return orderId;
   }
@@ -61,10 +65,6 @@ public class OrderItem extends BaseEntity<OrderItemId> {
     private Builder() {
     }
 
-    public static Builder builder() {
-      return new Builder();
-    }
-
     public Builder orderItemId(OrderItemId val) {
       orderItemId = val;
       return this;
@@ -93,5 +93,15 @@ public class OrderItem extends BaseEntity<OrderItemId> {
     public OrderItem build() {
       return new OrderItem(this);
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 }

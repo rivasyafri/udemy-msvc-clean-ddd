@@ -1,6 +1,7 @@
 package com.food.ordering.system.order.service.domain;
 
 import com.food.ordering.system.order.service.domain.dto.create.CreateOrderCommand;
+import com.food.ordering.system.order.service.domain.entity.Customer;
 import com.food.ordering.system.order.service.domain.entity.Order;
 import com.food.ordering.system.order.service.domain.entity.Restaurant;
 import com.food.ordering.system.order.service.domain.event.OrderCreatedEvent;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -49,10 +51,11 @@ public class OrderCreateHelper {
   }
 
   private void checkCustomerExists(@NotNull UUID customerId) {
-    customerRepository.findCustomer(customerId).orElseThrow(() -> {
+    Optional<Customer> oCustomer = customerRepository.findCustomer(customerId);
+    if (oCustomer.isEmpty()) {
       log.warn("Could not find customer with id: {}", customerId);
-      return new OrderDomainException("Could not find customer with id: " + customerId);
-    });
+      throw new OrderDomainException("Could not find customer with id: " + customerId);
+    }
   }
 
   private Restaurant checkRestaurantExists(CreateOrderCommand createOrderCommand) {

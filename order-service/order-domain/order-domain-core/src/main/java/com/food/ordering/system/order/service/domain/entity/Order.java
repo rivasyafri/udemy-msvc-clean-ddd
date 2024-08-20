@@ -101,7 +101,8 @@ public class Order extends AggregateRoot<OrderId> {
   private void validateItemPrice(OrderItem orderItem) {
     if (!orderItem.isPriceValid()) {
       throw new OrderDomainException("Order item price: " + orderItem.getPrice().amount()
-          + " is not valid for product " + orderItem.getProduct().getId().getValue() + "!");
+          + " is not valid for product " + orderItem.getProduct().getId().getValue() + "!"
+          + " Valid price: " + orderItem.getProduct().getPrice().amount());
     }
   }
 
@@ -122,6 +123,10 @@ public class Order extends AggregateRoot<OrderId> {
     trackingId = builder.trackingId;
     orderStatus = builder.orderStatus;
     failureMessages = builder.failureMessages;
+  }
+
+  public static Builder builder() {
+    return new Builder();
   }
 
   public CustomerId getCustomerId() {
@@ -168,10 +173,6 @@ public class Order extends AggregateRoot<OrderId> {
     private List<String> failureMessages;
 
     private Builder() {
-    }
-
-    public static Builder builder() {
-      return new Builder();
     }
 
     public Builder orderId(OrderId val) {
@@ -222,5 +223,15 @@ public class Order extends AggregateRoot<OrderId> {
     public Order build() {
       return new Order(this);
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 }

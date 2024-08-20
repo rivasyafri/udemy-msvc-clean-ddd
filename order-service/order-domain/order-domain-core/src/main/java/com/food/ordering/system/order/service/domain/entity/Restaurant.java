@@ -15,6 +15,9 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
     active = builder.active;
   }
 
+  public static Builder builder() {
+    return new Builder();
+  }
 
   public Map<Product, Product> getProducts() {
     return products;
@@ -30,10 +33,6 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
     private boolean active;
 
     private Builder() {
-    }
-
-    public static Builder builder() {
-      return new Builder();
     }
 
     public Builder restaurantId(RestaurantId val) {
@@ -54,5 +53,15 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
     public Restaurant build() {
       return new Restaurant(this);
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 }
