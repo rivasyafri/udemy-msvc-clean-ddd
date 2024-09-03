@@ -37,9 +37,9 @@ public class PaymentResponseKafkaListener implements KafkaConsumer<PaymentRespon
                       @Header(KafkaHeaders.OFFSET) List<Long> offsets) {
     log.info("{} number of payment responses received with keys: {}, partitions: {}, offsets: {}",
         messages.size(),
-        keys,
-        partitions,
-        offsets);
+        keys.toString(),
+        partitions.toString(),
+        offsets.toString());
 
     messages.forEach(paymentResponseAvroModel -> {
       if (PaymentStatus.COMPLETED == paymentResponseAvroModel.getPaymentStatus()) {

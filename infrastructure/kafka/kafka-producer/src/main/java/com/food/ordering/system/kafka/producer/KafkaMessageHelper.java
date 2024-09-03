@@ -1,6 +1,5 @@
-package com.food.ordering.system.order.service.messaging.publisher.kafka;
+package com.food.ordering.system.kafka.producer;
 
-import com.food.ordering.system.kafka.order.avro.model.PaymentRequestAvroModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.kafka.support.SendResult;
@@ -11,11 +10,11 @@ import java.util.function.Function;
 
 @Slf4j
 @Component
-public class OrderKafkaMessageHelper {
-  public <T> Function<Throwable, Void> failureCallback(String responseTopicName, T requestAvroModel, String requestAvroModelName) {
+public class KafkaMessageHelper {
+  public <T> Function<Throwable, Void> failureCallback(String topicName, T avroModel, String avroModelName) {
     return throwable -> {
       log.error("Error while sending {}: message {} to topic {}",
-          requestAvroModelName, requestAvroModel.toString(), responseTopicName, throwable);
+          avroModelName, avroModel.toString(), topicName, throwable);
       return null;
     };
   }
