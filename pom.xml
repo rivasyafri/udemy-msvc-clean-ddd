@@ -71,6 +71,16 @@
             </dependency>
             <dependency>
                 <groupId>id.rivasyafri.learning</groupId>
+                <artifactId>payment-data-access</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>id.rivasyafri.learning</groupId>
+                <artifactId>payment-messaging</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>id.rivasyafri.learning</groupId>
                 <artifactId>common-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
