@@ -5,6 +5,7 @@ import com.food.ordering.system.order.service.data.access.order.repository.Order
 import com.food.ordering.system.order.service.domain.entity.Order;
 import com.food.ordering.system.order.service.domain.ports.output.repository.OrderRepository;
 import com.food.ordering.system.order.service.domain.value.objects.TrackingId;
+import id.rivasyafri.learning.domain.value.objects.OrderId;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -27,6 +28,12 @@ public class OrderRepositoryImpl implements OrderRepository {
             orderDataAccessMapper.orderToOrderEntity(order)
         )
     );
+  }
+
+  @Override
+  public Optional<Order> findById(OrderId orderId) {
+    return orderJpaRepository.findById(orderId.getValue())
+        .map(orderDataAccessMapper::orderEntityToOrder);
   }
 
   @Override
