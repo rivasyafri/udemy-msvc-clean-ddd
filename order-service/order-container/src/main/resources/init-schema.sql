@@ -106,7 +106,7 @@ CREATE TABLE "order".restaurant_approval_outbox
     order_status order_status NOT NULL,
     version integer NOT NULL,
     CONSTRAINT restaurant_approval_outbox_pkey PRIMARY KEY (id)
-)
+);
 
 CREATE INDEX "restaurant_approval_outbox_saga_status"
     ON "order".restaurant_approval_outbox
