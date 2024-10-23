@@ -19,7 +19,8 @@ public abstract class PaymentEvent implements DomainEvent<Payment> {
     this.failureMessages = failureMessages;
   }
 
-  public Payment getPayment() {
+  @Override
+  public Payment value() {
     return payment;
   }
 

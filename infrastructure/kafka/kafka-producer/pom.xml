@@ -18,6 +18,10 @@
         </dependency>
         <dependency>
             <groupId>id.rivasyafri.learning</groupId>
+            <artifactId>outbox</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>id.rivasyafri.learning</groupId>
             <artifactId>kafka-config-data</artifactId>
         </dependency>
         <dependency>

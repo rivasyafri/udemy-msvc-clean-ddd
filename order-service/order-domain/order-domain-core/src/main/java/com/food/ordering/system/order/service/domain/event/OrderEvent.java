@@ -14,7 +14,8 @@ public abstract class OrderEvent implements DomainEvent<Order> {
     this.createdAt = createdAt;
   }
 
-  public Order getOrder() {
+  @Override
+  public Order value() {
     return order;
   }
 

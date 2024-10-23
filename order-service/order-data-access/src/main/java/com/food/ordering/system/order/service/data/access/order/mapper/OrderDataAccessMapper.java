@@ -31,6 +31,7 @@ public class OrderDataAccessMapper {
         .address(deliveryAddressToAddressEntity(order.getDeliveryAddress()))
         .price(order.getPrice().amount())
         .items(orderItemsToOrderItemEntities(order.getItems()))
+        .orderStatus(order.getOrderStatus())
         .failureMessages(CollectionUtils.isEmpty(order.getFailureMessages())
             ? String.join(FAILURE_MESSAGE_DELIMITER, order.getFailureMessages())
             : "")

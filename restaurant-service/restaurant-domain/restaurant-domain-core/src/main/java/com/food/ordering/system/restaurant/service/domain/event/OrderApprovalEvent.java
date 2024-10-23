@@ -23,7 +23,8 @@ public abstract class OrderApprovalEvent implements DomainEvent<OrderApproval> {
     this.createdAt = createdAt;
   }
 
-  public OrderApproval getOrderApproval() {
+  @Override
+  public OrderApproval value() {
     return orderApproval;
   }
 
