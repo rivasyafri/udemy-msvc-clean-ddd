@@ -4,6 +4,7 @@ import com.food.ordering.system.customer.service.domain.config.CustomerServiceCo
 import com.food.ordering.system.customer.service.domain.event.CustomerCreatedEvent;
 import com.food.ordering.system.customer.service.domain.ports.output.message.publisher.CustomerMessagePublisher;
 import com.food.ordering.system.customer.service.messaging.mapper.CustomerMessagingDataMapper;
+import com.food.ordering.system.kafka.order.avro.model.CustomerAvroModel;
 import com.food.ordering.system.kafka.producer.KafkaMessageHelper;
 import com.food.ordering.system.kafka.producer.service.KafkaProducer;
 import lombok.extern.slf4j.Slf4j;
@@ -43,10 +44,10 @@ public class CustomerCreatedEventKafkaPublisher implements CustomerMessagePublis
 
       kafkaProducer.send(
           customerServiceConfigData.getCustomerTopicName(),
-          customerAvroModel.getId(),
+          customerAvroModel.getId().toString(),
           customerAvroModel,
           kafkaMessageHelper.successCallback(
-              customerAvroModel.getId(),
+              customerAvroModel.getId().toString(),
               customerAvroModel,
               null
           ),
