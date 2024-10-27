@@ -7,7 +7,8 @@ public class OrderNotFoundException extends DomainException {
     super(message);
   }
 
-  public OrderNotFoundException(String message, Throwable cause) {
+  public OrderNotFoundException(String message,
+                                Throwable cause) {
     super(message, cause);
   }
 }

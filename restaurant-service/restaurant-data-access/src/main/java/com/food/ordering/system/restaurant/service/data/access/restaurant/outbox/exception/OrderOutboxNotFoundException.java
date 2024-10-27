@@ -2,7 +2,7 @@ package com.food.ordering.system.restaurant.service.data.access.restaurant.outbo
 
 public class OrderOutboxNotFoundException extends RuntimeException {
 
-    public OrderOutboxNotFoundException(String message) {
-        super(message);
-    }
+  public OrderOutboxNotFoundException(String message) {
+    super(message);
+  }
 }

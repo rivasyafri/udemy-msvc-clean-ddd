@@ -28,16 +28,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Sql(value = {"classpath:sql/OrderPaymentSagaTestSetUp.sql"})
 @Sql(value = {"classpath:sql/OrderPaymentSagaTestCleanUp.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class OrderPaymentSagaTest {
-  @Autowired
-  private OrderPaymentSaga orderPaymentSaga;
-  @Autowired
-  private PaymentOutboxJpaRepository paymentOutboxJpaRepository;
-
   private static final UUID SAGA_ID = UUID.fromString("15a497c1-0f4b-4eff-b9f4-c402c8c07afa");
   private static final UUID ORDER_ID = UUID.fromString("d215b5f8-0249-4dc5-89a3-51fd148cfb17");
   private static final UUID CUSTOMER_ID = UUID.fromString("d215b5f8-0249-4dc5-89a3-51fd148cfb41");
   private static final UUID PAYMENT_ID = UUID.randomUUID();
   private static final BigDecimal PRICE = new BigDecimal(100);
+  @Autowired
+  private OrderPaymentSaga orderPaymentSaga;
+  @Autowired
+  private PaymentOutboxJpaRepository paymentOutboxJpaRepository;
 
   @Test
   void testDoublePayment() {
@@ -96,7 +95,8 @@ class OrderPaymentSagaTest {
   private void assertPaymentOutbox() {
     Optional<PaymentOutboxEntity> paymentOutboxEntity =
         paymentOutboxJpaRepository.findByTypeAndSagaIdAndSagaStatusIn(ORDER_SAGA_NAME, SAGA_ID,
-                                                                      List.of(SagaStatus.PROCESSING));
+                                                                      List.of(SagaStatus.PROCESSING)
+        );
     assertTrue(paymentOutboxEntity.isPresent());
   }
 }

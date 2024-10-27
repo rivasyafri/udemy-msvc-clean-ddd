@@ -6,22 +6,11 @@ import id.rivasyafri.learning.domain.value.objects.Money;
 import id.rivasyafri.learning.domain.value.objects.OrderId;
 
 public class OrderItem extends BaseEntity<OrderItemId> {
-  private OrderId orderId;
   private final Product product;
   private final int quantity;
   private final Money price;
   private final Money subTotal;
-
-  void initializeOrderItem(OrderId orderId, OrderItemId orderItemId) {
-    this.orderId = orderId;
-    super.setId(orderItemId);
-  }
-
-  boolean isPriceValid() {
-    return price.isGreaterThanZero() &&
-        price.equals(product.getPrice()) &&
-        price.multiply(quantity).equals(subTotal);
-  }
+  private OrderId orderId;
 
   private OrderItem(Builder builder) {
     super.setId(builder.orderItemId);
@@ -33,6 +22,18 @@ public class OrderItem extends BaseEntity<OrderItemId> {
 
   public static Builder builder() {
     return new Builder();
+  }
+
+  void initializeOrderItem(OrderId orderId,
+                           OrderItemId orderItemId) {
+    this.orderId = orderId;
+    super.setId(orderItemId);
+  }
+
+  boolean isPriceValid() {
+    return price.isGreaterThanZero() &&
+        price.equals(product.getPrice()) &&
+        price.multiply(quantity).equals(subTotal);
   }
 
   public OrderId getOrderId() {
@@ -53,6 +54,16 @@ public class OrderItem extends BaseEntity<OrderItemId> {
 
   public Money getSubTotal() {
     return subTotal;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 
   public static final class Builder {
@@ -93,15 +104,5 @@ public class OrderItem extends BaseEntity<OrderItemId> {
     public OrderItem build() {
       return new OrderItem(this);
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 }

@@ -44,19 +44,22 @@ public class PaymentOutboxScheduler implements OutboxScheduler {
         );
     if (outboxMessageResponse.isPresent() && !outboxMessageResponse.get().isEmpty()) {
       List<OrderPaymentOutboxMessage> outboxMessages = outboxMessageResponse.get();
-      log.info("Received {} OrderPaymentOutboxMessage with ids: {}, sending to message bus!",
-               outboxMessages.size(),
-               outboxMessages.stream()
-                   .map(OrderPaymentOutboxMessage::getId)
-                   .map(UUID::toString)
-                   .collect(Collectors.joining(","))
+      log.info(
+          "Received {} OrderPaymentOutboxMessage with ids: {}, sending to message bus!",
+          outboxMessages.size(),
+          outboxMessages.stream()
+              .map(OrderPaymentOutboxMessage::getId)
+              .map(UUID::toString)
+              .collect(Collectors.joining(","))
       );
-      outboxMessages.forEach(outboxMessage -> paymentRequestMessagePublisher.publish(outboxMessage, this::updateOutboxStatus));
+      outboxMessages.forEach(outboxMessage -> paymentRequestMessagePublisher.publish(outboxMessage,
+                                                                                     this::updateOutboxStatus));
       log.info("{} OrderPaymentOutboxMessage sent to message bus!", outboxMessages.size());
     }
   }
 
-  private void updateOutboxStatus(OrderPaymentOutboxMessage outboxMessage, OutboxStatus outboxStatus) {
+  private void updateOutboxStatus(OrderPaymentOutboxMessage outboxMessage,
+                                  OutboxStatus outboxStatus) {
     outboxMessage.setOutboxStatus(outboxStatus);
     paymentOutboxHelper.save(outboxMessage);
     log.info("OrderPaymentOutboxMessage is updated with outbox status: {} ", outboxStatus.name());

@@ -8,9 +8,9 @@ import id.rivasyafri.learning.domain.value.objects.OrderStatus;
 import java.util.List;
 
 public class OrderDetail extends BaseEntity<OrderId> {
+  private final List<Product> products;
   private OrderStatus orderStatus;
   private Money totalAmount;
-  private final List<Product> products;
 
   private OrderDetail(Builder builder) {
     setId(builder.orderId);
@@ -33,6 +33,16 @@ public class OrderDetail extends BaseEntity<OrderId> {
 
   public List<Product> getProducts() {
     return products;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 
   public static final class Builder {
@@ -67,15 +77,5 @@ public class OrderDetail extends BaseEntity<OrderId> {
     public OrderDetail build() {
       return new OrderDetail(this);
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 }

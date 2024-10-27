@@ -7,7 +7,8 @@ public class PaymentDomainException extends DomainException {
     super(message);
   }
 
-  public PaymentDomainException(String message, Throwable cause) {
+  public PaymentDomainException(String message,
+                                Throwable cause) {
     super(message, cause);
   }
 }

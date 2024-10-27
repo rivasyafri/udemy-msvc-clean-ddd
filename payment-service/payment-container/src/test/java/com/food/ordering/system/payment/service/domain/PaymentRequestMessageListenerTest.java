@@ -29,13 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Slf4j
 @SpringBootTest(classes = PaymentServiceApplication.class)
 class PaymentRequestMessageListenerTest {
+  private static final UUID CUSTOMER_ID = UUID.fromString("d215b5f8-0249-4dc5-89a3-51fd148cfb41");
+  private static final BigDecimal PRICE = new BigDecimal(100);
   @Autowired
   private PaymentRequestMessageListener paymentRequestMessageListener;
   @Autowired
   private OrderOutboxJpaRepository orderOutboxJpaRepository;
-
-  private static final UUID CUSTOMER_ID = UUID.fromString("d215b5f8-0249-4dc5-89a3-51fd148cfb41");
-  private static final BigDecimal PRICE = new BigDecimal(100);
 
   @Test
   void testDoublePayment() {
@@ -106,7 +105,8 @@ class PaymentRequestMessageListenerTest {
             ORDER_SAGA_NAME,
             sagaId,
             PaymentStatus.COMPLETED,
-            OutboxStatus.STARTED);
+            OutboxStatus.STARTED
+        );
     assertTrue(orderOutboxEntity.isPresent());
     assertEquals(sagaId, orderOutboxEntity.get().getSagaId());
   }

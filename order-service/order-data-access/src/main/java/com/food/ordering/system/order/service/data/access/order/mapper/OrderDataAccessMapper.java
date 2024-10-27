@@ -33,8 +33,8 @@ public class OrderDataAccessMapper {
         .items(orderItemsToOrderItemEntities(order.getItems()))
         .orderStatus(order.getOrderStatus())
         .failureMessages(CollectionUtils.isEmpty(order.getFailureMessages())
-            ? String.join(FAILURE_MESSAGE_DELIMITER, order.getFailureMessages())
-            : "")
+                             ? String.join(FAILURE_MESSAGE_DELIMITER, order.getFailureMessages())
+                             : "")
         .build();
     orderEntity.getAddress().setOrder(orderEntity);
     orderEntity.getItems().forEach(orderItemEntity -> orderItemEntity.setOrder(orderEntity));
@@ -52,8 +52,9 @@ public class OrderDataAccessMapper {
         .deliveryAddress(addressEntityToDeliveryAddress(orderEntity.getAddress()))
         .items(orderItemEntitiesToOrderItems(orderEntity.getItems()))
         .failureMessages(orderEntity.getFailureMessages().isBlank()
-            ? new ArrayList<>()
-            : new ArrayList<>(Arrays.asList(orderEntity.getFailureMessages().split(FAILURE_MESSAGE_DELIMITER))))
+                             ? new ArrayList<>()
+                             : new ArrayList<>(Arrays.asList(orderEntity.getFailureMessages()
+                                                                 .split(FAILURE_MESSAGE_DELIMITER))))
         .build();
   }
 

@@ -16,7 +16,8 @@ public class OrderTrackCommandHandler {
   private final OrderDataMapper orderDataMapper;
   private final OrderRepository orderRepository;
 
-  public OrderTrackCommandHandler(OrderDataMapper orderDataMapper, OrderRepository orderRepository) {
+  public OrderTrackCommandHandler(OrderDataMapper orderDataMapper,
+                                  OrderRepository orderRepository) {
     this.orderDataMapper = orderDataMapper;
     this.orderRepository = orderRepository;
   }

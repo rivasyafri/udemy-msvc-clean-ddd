@@ -17,10 +17,11 @@ import java.util.Objects;
 import static id.rivasyafri.learning.domain.DomainConstants.UTC;
 
 @Slf4j
-public class OrderDomainServiceImpl implements OrderDomainService{
+public class OrderDomainServiceImpl implements OrderDomainService {
 
   @Override
-  public OrderCreatedEvent validateAndInitiateOrder(Order order, Restaurant restaurant) {
+  public OrderCreatedEvent validateAndInitiateOrder(Order order,
+                                                    Restaurant restaurant) {
     validateRestaurant(restaurant);
     setOrderProductInformation(order, restaurant);
     order.validateOrder();
@@ -43,14 +44,16 @@ public class OrderDomainServiceImpl implements OrderDomainService{
   }
 
   @Override
-  public OrderCancelledEvent cancelOrderPayment(Order order, List<String> failureMessages) {
+  public OrderCancelledEvent cancelOrderPayment(Order order,
+                                                List<String> failureMessages) {
     order.initCancel(failureMessages);
     log.info("Order payment is cancelling for order with id: {}", order.getId().getValue());
     return new OrderCancelledEvent(order, ZonedDateTime.now(ZoneId.of(UTC)));
   }
 
   @Override
-  public void cancelOrder(Order order, List<String> failureMessages) {
+  public void cancelOrder(Order order,
+                          List<String> failureMessages) {
     order.cancel(failureMessages);
     log.info("Order with id: {} is cancelled", order.getId().getValue());
   }
@@ -58,11 +61,12 @@ public class OrderDomainServiceImpl implements OrderDomainService{
   private void validateRestaurant(Restaurant restaurant) {
     if (!restaurant.isActive()) {
       throw new OrderDomainException("Restaurant with id " + restaurant.getId().getValue() +
-          " is currently not active!");
+                                         " is currently not active!");
     }
   }
 
-  private void setOrderProductInformation(Order order, Restaurant restaurant) {
+  private void setOrderProductInformation(Order order,
+                                          Restaurant restaurant) {
     order.getItems().stream().filter(Objects::nonNull).forEach(item -> {
       Product currentProduct = item.getProduct();
       Product productFromRestaurant = restaurant.getProducts().get(currentProduct);

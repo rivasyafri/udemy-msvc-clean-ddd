@@ -39,25 +39,31 @@ public class RestaurantApprovalResponseKafkaListener implements KafkaConsumer<Re
                       @Header(KafkaHeaders.RECEIVED_KEY) List<String> keys,
                       @Header(KafkaHeaders.RECEIVED_PARTITION) List<Integer> partitions,
                       @Header(KafkaHeaders.OFFSET) List<Long> offsets) {
-    log.info("{} number of restaurant approval responses received with keys {}, partitions {}, and offset {}",
+    log.info(
+        "{} number of restaurant approval responses received with keys {}, partitions {}, and offset {}",
         messages.size(),
         keys.toString(),
         partitions.toString(),
-        offsets.toString());
+        offsets.toString()
+    );
 
     messages.forEach(restaurantApprovalResponseAvroModel -> {
       try {
         if (OrderApprovalStatus.APPROVED == restaurantApprovalResponseAvroModel.getOrderApprovalStatus()) {
-          log.info("Processing approved order for order id: {}",
-              restaurantApprovalResponseAvroModel.getOrderId());
+          log.info(
+              "Processing approved order for order id: {}",
+              restaurantApprovalResponseAvroModel.getOrderId()
+          );
           restaurantApprovalResponseMessageListener.orderApproved(
               orderMessagingDataMapper
                   .approvalResponseAvroModelToApprovalResponse(restaurantApprovalResponseAvroModel)
           );
         } else if (OrderApprovalStatus.REJECTED == restaurantApprovalResponseAvroModel.getOrderApprovalStatus()) {
-          log.info("Processing rejected order for order id: {}, with failure messages: {}",
+          log.info(
+              "Processing rejected order for order id: {}, with failure messages: {}",
               restaurantApprovalResponseAvroModel.getOrderId(),
-              String.join(FAILURE_MESSAGE_DELIMITER, restaurantApprovalResponseAvroModel.getFailureMessages()));
+              String.join(FAILURE_MESSAGE_DELIMITER, restaurantApprovalResponseAvroModel.getFailureMessages())
+          );
           restaurantApprovalResponseMessageListener.orderRejected(
               orderMessagingDataMapper
                   .approvalResponseAvroModelToApprovalResponse(restaurantApprovalResponseAvroModel)

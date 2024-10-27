@@ -9,13 +9,16 @@ import java.util.UUID;
 
 public interface OrderOutboxRepository {
 
-    OrderOutboxMessage save(OrderOutboxMessage orderOutboxMessage);
+  OrderOutboxMessage save(OrderOutboxMessage orderOutboxMessage);
 
-    Optional<List<OrderOutboxMessage>> findByTypeAndOutboxStatus(String type, OutboxStatus outboxStatus);
+  Optional<List<OrderOutboxMessage>> findByTypeAndOutboxStatus(String type,
+                                                               OutboxStatus outboxStatus);
 
-    Optional<OrderOutboxMessage> findByTypeAndSagaIdAndOutboxStatus(String type, UUID sagaId,
-                                                                    OutboxStatus outboxStatus);
+  Optional<OrderOutboxMessage> findByTypeAndSagaIdAndOutboxStatus(String type,
+                                                                  UUID sagaId,
+                                                                  OutboxStatus outboxStatus);
 
-    void deleteByTypeAndOutboxStatus(String type, OutboxStatus outboxStatus);
+  void deleteByTypeAndOutboxStatus(String type,
+                                   OutboxStatus outboxStatus);
 
 }

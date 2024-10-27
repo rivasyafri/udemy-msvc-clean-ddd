@@ -27,6 +27,16 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
     return active;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
   public static final class Builder {
     private RestaurantId restaurantId;
     private Map<Product, Product> products;
@@ -53,15 +63,5 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
     public Restaurant build() {
       return new Restaurant(this);
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 }

@@ -34,8 +34,10 @@ public class OrderCreateCommandHandler {
   @Transactional
   public CreateOrderResponse createOrder(CreateOrderCommand createOrderCommand) {
     OrderCreatedEvent orderCreatedEvent = orderCreateHelper.persistOrder(createOrderCommand);
-    CreateOrderResponse createOrderResponse = orderDataMapper.orderToCreateOrderResponse(orderCreatedEvent.value(),
-                                                                                         "Order Created Successfully");
+    CreateOrderResponse createOrderResponse = orderDataMapper.orderToCreateOrderResponse(
+        orderCreatedEvent.value(),
+        "Order Created Successfully"
+    );
     paymentOutboxHelper.save(
         orderDataMapper.orderPaymentEventPayloadToOrderPaymentOutboxMessage(
             orderDataMapper.orderCreatedEventToOrderPaymentEventPayload(orderCreatedEvent),

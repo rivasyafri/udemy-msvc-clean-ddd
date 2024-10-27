@@ -70,7 +70,8 @@ public class OrderCreateHelper {
   private Order saveOrder(Order order) {
     Order orderSaved = orderRepository.save(order);
     if (orderSaved == null) {
-      log.error("Could not save order from customer: {}, and restaurant: {}", order.getCustomerId(), order.getRestaurantId());
+      log.error("Could not save order from customer: {}, and restaurant: {}", order.getCustomerId(),
+                order.getRestaurantId());
       throw new OrderDomainException("Could not save order");
     }
     return orderSaved;

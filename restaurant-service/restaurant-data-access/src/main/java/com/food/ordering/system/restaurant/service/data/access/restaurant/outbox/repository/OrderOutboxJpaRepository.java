@@ -12,10 +12,14 @@ import java.util.UUID;
 @Repository
 public interface OrderOutboxJpaRepository extends JpaRepository<OrderOutboxEntity, UUID> {
 
-    Optional<List<OrderOutboxEntity>> findByTypeAndOutboxStatus(String type, OutboxStatus outboxStatus);
+  Optional<List<OrderOutboxEntity>> findByTypeAndOutboxStatus(String type,
+                                                              OutboxStatus outboxStatus);
 
-    Optional<OrderOutboxEntity> findByTypeAndSagaIdAndOutboxStatus(String type, UUID sagaId, OutboxStatus outboxStatus);
+  Optional<OrderOutboxEntity> findByTypeAndSagaIdAndOutboxStatus(String type,
+                                                                 UUID sagaId,
+                                                                 OutboxStatus outboxStatus);
 
-    void deleteByTypeAndOutboxStatus(String type, OutboxStatus outboxStatus);
+  void deleteByTypeAndOutboxStatus(String type,
+                                   OutboxStatus outboxStatus);
 
 }

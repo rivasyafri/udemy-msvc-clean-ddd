@@ -23,6 +23,14 @@ import static id.rivasyafri.learning.domain.DomainConstants.UTC;
 @Slf4j
 public class PaymentDomainServiceImpl implements PaymentDomainService {
 
+  private static Money getTotalHistoryAmount(List<CreditHistory> creditHistories,
+                                             TransactionType transactionType) {
+    return creditHistories.stream()
+        .filter(creditHistory -> transactionType == creditHistory.getTransactionType())
+        .map(CreditHistory::getAmount)
+        .reduce(Money.ZERO, Money::add);
+  }
+
   @Override
   public PaymentEvent validateAndInitiatePayment(Payment payment,
                                                  CreditEntry creditEntry,
@@ -40,7 +48,8 @@ public class PaymentDomainServiceImpl implements PaymentDomainService {
       payment.updateStatus(PaymentStatus.COMPLETED);
       return new PaymentCompletedEvent(
           payment,
-          ZonedDateTime.now(ZoneId.of(UTC)));
+          ZonedDateTime.now(ZoneId.of(UTC))
+      );
     } else {
       log.info("Payment initiation is failed for order id: {}", payment.getOrderId().getValue());
       payment.updateStatus(PaymentStatus.FAILED);
@@ -71,20 +80,26 @@ public class PaymentDomainServiceImpl implements PaymentDomainService {
     } else {
       log.info("Payment cancellation is failed for order id: {}", payment.getOrderId().getValue());
       payment.updateStatus(PaymentStatus.FAILED);
-      return new PaymentFailedEvent(payment,
+      return new PaymentFailedEvent(
+          payment,
           ZonedDateTime.now(ZoneId.of(UTC)),
-          failureMessages);
+          failureMessages
+      );
     }
   }
 
-  private void validateCreditEntry(Payment payment, CreditEntry creditEntry, List<String> failureMessages) {
+  private void validateCreditEntry(Payment payment,
+                                   CreditEntry creditEntry,
+                                   List<String> failureMessages) {
     if (payment.getPrice().isGreaterThan(creditEntry.getTotalCreditAmount())) {
       log.error("Customer with id: {} doesn't have enough credit for payment!", payment.getCustomerId().getValue());
-      failureMessages.add("Customer with id=" + payment.getCustomerId().getValue() + " doesn't have enough credit for payment!");
+      failureMessages.add("Customer with id=" + payment.getCustomerId()
+          .getValue() + " doesn't have enough credit for payment!");
     }
   }
 
-  private void subtractCreditEntry(Payment payment, CreditEntry creditEntry) {
+  private void subtractCreditEntry(Payment payment,
+                                   CreditEntry creditEntry) {
     creditEntry.subtractCreditAmount(payment.getPrice());
   }
 
@@ -108,28 +123,25 @@ public class PaymentDomainServiceImpl implements PaymentDomainService {
     Money totalDebitHistory = getTotalHistoryAmount(creditHistories, TransactionType.DEBIT);
 
     if (totalDebitHistory.isGreaterThan(totalCreditHistory)) {
-      log.error("Customer with id: {} doesn't have enough credit according to credit history", creditEntry.getCustomerId().getValue());
+      log.error("Customer with id: {} doesn't have enough credit according to credit history", creditEntry
+          .getCustomerId().getValue());
       failureMessages.add("Customer with id=" + creditEntry.getCustomerId().getValue() +
-          " doesn't have enough credit according to credit history!");
+                              " doesn't have enough credit according to credit history!");
     }
 
 
     if (!creditEntry.getTotalCreditAmount().equals(totalCreditHistory.subtract(totalDebitHistory))) {
-      log.error("Credit history total is not equal to current credit for customer id: {}!",
-          creditEntry.getCustomerId().getValue());
+      log.error(
+          "Credit history total is not equal to current credit for customer id: {}!",
+          creditEntry.getCustomerId().getValue()
+      );
       failureMessages.add("Credit history total is not equal to current credit for customer id: " +
-          creditEntry.getCustomerId().getValue() + "!");
+                              creditEntry.getCustomerId().getValue() + "!");
     }
   }
 
-  private static Money getTotalHistoryAmount(List<CreditHistory> creditHistories, TransactionType transactionType) {
-    return creditHistories.stream()
-        .filter(creditHistory -> transactionType == creditHistory.getTransactionType())
-        .map(CreditHistory::getAmount)
-        .reduce(Money.ZERO, Money::add);
-  }
-
-  private void addCreditEntry(Payment payment, CreditEntry creditEntry) {
+  private void addCreditEntry(Payment payment,
+                              CreditEntry creditEntry) {
     creditEntry.addCreditAmount(payment.getPrice());
   }
 }

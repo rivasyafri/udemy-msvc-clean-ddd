@@ -44,6 +44,12 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = OrderTestConfiguration.class)
 class OrderApplicationServiceTest {
 
+  private static final UUID CUSTOMER_ID = UUIDv7.randomUUID();
+  private static final UUID RESTAURANT_ID = UUIDv7.randomUUID();
+  private static final UUID PRODUCT_ID = UUIDv7.randomUUID();
+  private static final UUID ORDER_ID = UUIDv7.randomUUID();
+  private static final UUID SAGA_ID = UUIDv7.randomUUID();
+  private static final BigDecimal PRICE = new BigDecimal("200");
   @Autowired
   private OrderApplicationService orderApplicationService;
   @Autowired
@@ -58,17 +64,10 @@ class OrderApplicationServiceTest {
   private PaymentOutboxRepository paymentOutboxRepository;
   @Autowired
   private ObjectMapper objectMapper;
-
   private CreateOrderCommand createOrderCommand;
   private CreateOrderCommand createOrderCommandWrongPrice;
   private CreateOrderCommand createOrderCommandWrongProductPrice;
   private Product theProduct;
-  private static final UUID CUSTOMER_ID = UUIDv7.randomUUID();
-  private static final UUID RESTAURANT_ID = UUIDv7.randomUUID();
-  private static final UUID PRODUCT_ID = UUIDv7.randomUUID();
-  private static final UUID ORDER_ID = UUIDv7.randomUUID();
-  private static final UUID SAGA_ID = UUIDv7.randomUUID();
-  private static final BigDecimal PRICE = new BigDecimal("200");
 
   @BeforeAll
   public void init() {
@@ -82,10 +81,10 @@ class OrderApplicationServiceTest {
         .customerId(CUSTOMER_ID)
         .restaurantId(RESTAURANT_ID)
         .address(OrderAddressDto.builder()
-            .street("street_1")
-            .postalCode("1000AB")
-            .city("city_1")
-            .build())
+                     .street("street_1")
+                     .postalCode("1000AB")
+                     .city("city_1")
+                     .build())
         .price(PRICE)
         .items(
             Set.of(
@@ -108,10 +107,10 @@ class OrderApplicationServiceTest {
         .customerId(CUSTOMER_ID)
         .restaurantId(RESTAURANT_ID)
         .address(OrderAddressDto.builder()
-            .street("street_1")
-            .postalCode("1000AB")
-            .city("city_1")
-            .build())
+                     .street("street_1")
+                     .postalCode("1000AB")
+                     .city("city_1")
+                     .build())
         .price(new BigDecimal(250))
         .items(
             Set.of(
@@ -134,10 +133,10 @@ class OrderApplicationServiceTest {
         .customerId(CUSTOMER_ID)
         .restaurantId(RESTAURANT_ID)
         .address(OrderAddressDto.builder()
-            .street("street_1")
-            .postalCode("1000AB")
-            .city("city_1")
-            .build())
+                     .street("street_1")
+                     .postalCode("1000AB")
+                     .city("city_1")
+                     .build())
         .price(PRICE)
         .items(
             Set.of(
@@ -156,8 +155,7 @@ class OrderApplicationServiceTest {
             ))
         .build();
 
-    Customer customer = new Customer();
-    customer.setId(new CustomerId(CUSTOMER_ID));
+    Customer customer = new Customer(new CustomerId(CUSTOMER_ID));
 
     Restaurant restaurantResponse = Restaurant.builder()
         .restaurantId(new RestaurantId(createOrderCommand.getRestaurantId()))
@@ -185,18 +183,26 @@ class OrderApplicationServiceTest {
 
   @Test
   void testCreateOrderWithWrongTotalPrice() {
-    OrderDomainException orderDomainException = assertThrows(OrderDomainException.class,
-        () -> orderApplicationService.createOrder(createOrderCommandWrongPrice));
-    assertEquals("Total price: 250.00 is not equal to Order items total: 200.00!",
-        orderDomainException.getMessage());
+    OrderDomainException orderDomainException = assertThrows(
+        OrderDomainException.class,
+        () -> orderApplicationService.createOrder(createOrderCommandWrongPrice)
+    );
+    assertEquals(
+        "Total price: 250.00 is not equal to Order items total: 200.00!",
+        orderDomainException.getMessage()
+    );
   }
 
   @Test
   void testCreateOrderWithWrongProductPrice() {
-    OrderDomainException orderDomainException = assertThrows(OrderDomainException.class,
-        () -> orderApplicationService.createOrder(createOrderCommandWrongProductPrice));
-    assertEquals("Order item price: 40.00 is not valid for product " + PRODUCT_ID + "! Valid price: 50.00",
-        orderDomainException.getMessage());
+    OrderDomainException orderDomainException = assertThrows(
+        OrderDomainException.class,
+        () -> orderApplicationService.createOrder(createOrderCommandWrongProductPrice)
+    );
+    assertEquals(
+        "Order item price: 40.00 is not valid for product " + PRODUCT_ID + "! Valid price: 50.00",
+        orderDomainException.getMessage()
+    );
   }
 
   @Test
@@ -209,10 +215,14 @@ class OrderApplicationServiceTest {
 
     when(mockRestaurantRepository.findRestaurantInformation(orderDataMapper.createOrderCommandToRestaurant(createOrderCommand)))
         .thenReturn(Optional.of(restaurantResponse));
-    OrderDomainException orderDomainException = assertThrows(OrderDomainException.class,
-        () -> orderApplicationService.createOrder(createOrderCommandWrongPrice));
-    assertEquals("Restaurant with id " + restaurantResponse.getId().getValue() + " is currently not active!",
-        orderDomainException.getMessage());
+    OrderDomainException orderDomainException = assertThrows(
+        OrderDomainException.class,
+        () -> orderApplicationService.createOrder(createOrderCommandWrongPrice)
+    );
+    assertEquals(
+        "Restaurant with id " + restaurantResponse.getId().getValue() + " is currently not active!",
+        orderDomainException.getMessage()
+    );
   }
 
   private OrderPaymentOutboxMessage getOrderPaymentOutboxMessage() {

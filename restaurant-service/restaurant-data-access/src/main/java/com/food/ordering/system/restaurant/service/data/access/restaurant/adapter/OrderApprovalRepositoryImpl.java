@@ -22,7 +22,7 @@ public class OrderApprovalRepositoryImpl implements OrderApprovalRepository {
   public OrderApproval save(OrderApproval orderApproval) {
     return restaurantDataAccessMapper
         .orderApprovalEntityToOrderApproval(orderApprovalJpaRepository
-            .save(restaurantDataAccessMapper.orderApprovalToOrderApprovalEntity(orderApproval)));
+                                                .save(restaurantDataAccessMapper.orderApprovalToOrderApprovalEntity(orderApproval)));
   }
 
 }

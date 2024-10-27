@@ -6,11 +6,9 @@ import com.food.ordering.system.order.service.domain.dto.create.CreateOrderComma
 import com.food.ordering.system.order.service.domain.dto.create.CreateOrderResponse;
 import com.food.ordering.system.order.service.domain.dto.create.OrderAddressDto;
 import com.food.ordering.system.order.service.domain.dto.create.OrderItemDto;
+import com.food.ordering.system.order.service.domain.dto.message.CustomerModel;
 import com.food.ordering.system.order.service.domain.dto.track.TrackOrderResponse;
-import com.food.ordering.system.order.service.domain.entity.Order;
-import com.food.ordering.system.order.service.domain.entity.OrderItem;
-import com.food.ordering.system.order.service.domain.entity.Product;
-import com.food.ordering.system.order.service.domain.entity.Restaurant;
+import com.food.ordering.system.order.service.domain.entity.*;
 import com.food.ordering.system.order.service.domain.event.OrderCancelledEvent;
 import com.food.ordering.system.order.service.domain.event.OrderCreatedEvent;
 import com.food.ordering.system.order.service.domain.event.OrderPaidEvent;
@@ -105,10 +103,10 @@ public class OrderDataMapper {
             orderPaidEvent.value().getItems()
                 .stream()
                 .map(orderItem ->
-                  OrderApprovalEventProduct.builder()
-                      .id(orderItem.getProduct().getId().getValue())
-                      .quantity(orderItem.getQuantity())
-                      .build()
+                         OrderApprovalEventProduct.builder()
+                             .id(orderItem.getProduct().getId().getValue())
+                             .quantity(orderItem.getQuantity())
+                             .build()
                 )
                 .toList()
         )
@@ -148,14 +146,16 @@ public class OrderDataMapper {
                                           .build())
                              .collect(Collectors.toMap(Function.identity(), Function.identity(),
                                                        (left, right) -> OrderItem
-                                 .builder()
-                                 .orderItemId(left.getId())
-                                 .price(!left.getPrice()
-                                     .isGreaterThan(right.getPrice()) ? left.getPrice() : right.getPrice())
-                                 .quantity(left.getQuantity() + right.getQuantity())
-                                 .subTotal(left.getSubTotal().add(right.getSubTotal()))
-                                 .product(left.getProduct())
-                                 .build()))
+                                                           .builder()
+                                                           .orderItemId(left.getId())
+                                                           .price(!left.getPrice()
+                                                               .isGreaterThan(right.getPrice()) ? left.getPrice() :
+                                                                      right.getPrice())
+                                                           .quantity(left.getQuantity() + right.getQuantity())
+                                                           .subTotal(left.getSubTotal().add(right.getSubTotal()))
+                                                           .product(left.getProduct())
+                                                           .build()
+                             ))
                              .values());
   }
 
@@ -193,12 +193,24 @@ public class OrderDataMapper {
         .build();
   }
 
+  public Customer customerModelToCustomer(CustomerModel customerModel) {
+    return new Customer(
+        new CustomerId(customerModel.getId()),
+        customerModel.getUsername(),
+        customerModel.getFirstName(),
+        customerModel.getLastName()
+    );
+  }
+
+
   private String createPayload(OrderApprovalEventPayload payload) {
     try {
       return objectMapper.writeValueAsString(payload);
     } catch (JsonProcessingException e) {
-      log.error("Could not create {} object for order id: {}", payload.getClass().getSimpleName(), payload.getOrderId(), e);
-      throw new OrderDomainException("Could not create " + payload.getClass().getSimpleName() + " object for order id: " + payload.getOrderId(), e);
+      log.error("Could not create {} object for order id: {}", payload.getClass()
+          .getSimpleName(), payload.getOrderId(), e);
+      throw new OrderDomainException("Could not create " + payload.getClass()
+          .getSimpleName() + " object for order id: " + payload.getOrderId(), e);
     }
   }
 
@@ -206,8 +218,10 @@ public class OrderDataMapper {
     try {
       return objectMapper.writeValueAsString(payload);
     } catch (JsonProcessingException e) {
-      log.error("Could not create {} object for order id: {}", payload.getClass().getSimpleName(), payload.getOrderId(), e);
-      throw new OrderDomainException("Could not create " + payload.getClass().getSimpleName() + " object for order id: " + payload.getOrderId(), e);
+      log.error("Could not create {} object for order id: {}", payload.getClass()
+          .getSimpleName(), payload.getOrderId(), e);
+      throw new OrderDomainException("Could not create " + payload.getClass()
+          .getSimpleName() + " object for order id: " + payload.getOrderId(), e);
     }
   }
 }

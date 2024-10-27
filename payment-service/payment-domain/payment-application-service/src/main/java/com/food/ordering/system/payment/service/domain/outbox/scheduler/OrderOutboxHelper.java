@@ -59,8 +59,10 @@ public class OrderOutboxHelper {
   public void save(OrderOutboxMessage orderOutboxMessage) {
     OrderOutboxMessage outboxMessage = orderOutboxRepository.save(orderOutboxMessage);
     if (outboxMessage == null) {
-      log.error("Could not save {} with outbox id: {}", OrderOutboxMessage.class.getSimpleName(), orderOutboxMessage.getId());
-      throw new PaymentDomainException("Could not save " + OrderOutboxMessage.class.getSimpleName() + " with outbox id: " +
+      log.error("Could not save {} with outbox id: {}", OrderOutboxMessage.class.getSimpleName(),
+                orderOutboxMessage.getId());
+      throw new PaymentDomainException("Could not save " + OrderOutboxMessage.class.getSimpleName() + " with outbox " +
+                                           "id: " +
                                            orderOutboxMessage.getId());
     }
     log.info("OrderOutboxMessage saved with outbox id: {}", outboxMessage.getId());

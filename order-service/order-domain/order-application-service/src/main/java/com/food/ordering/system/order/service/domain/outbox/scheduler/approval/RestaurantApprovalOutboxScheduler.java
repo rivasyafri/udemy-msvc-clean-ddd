@@ -39,7 +39,8 @@ public class RestaurantApprovalOutboxScheduler implements OutboxScheduler {
     Optional<List<OrderApprovalOutboxMessage>> outboxMessageResponse =
         approvalOutboxHelper.getApprovalOutboxMessageByOutboxStatusAndSagaStatus(
             OutboxStatus.STARTED,
-            SagaStatus.PROCESSING);
+            SagaStatus.PROCESSING
+        );
     if (outboxMessageResponse.isPresent() && !outboxMessageResponse.get().isEmpty()) {
       List<OrderApprovalOutboxMessage> outboxMessages = outboxMessageResponse.get();
       log.info(
@@ -50,12 +51,14 @@ public class RestaurantApprovalOutboxScheduler implements OutboxScheduler {
               .map(UUID::toString)
               .collect(Collectors.joining(","))
       );
-      outboxMessages.forEach(outboxMessage -> restaurantApprovalRequestMessagePublisher.publish(outboxMessage, this::updateOutboxStatus));
+      outboxMessages.forEach(outboxMessage -> restaurantApprovalRequestMessagePublisher.publish(outboxMessage,
+                                                                                                this::updateOutboxStatus));
       log.info("{} OrderPaymentOutboxMessage sent to message bus!", outboxMessages.size());
     }
   }
 
-  private void updateOutboxStatus(OrderApprovalOutboxMessage orderApprovalOutboxMessage, OutboxStatus outboxStatus) {
+  private void updateOutboxStatus(OrderApprovalOutboxMessage orderApprovalOutboxMessage,
+                                  OutboxStatus outboxStatus) {
     orderApprovalOutboxMessage.setOutboxStatus(outboxStatus);
     approvalOutboxHelper.save(orderApprovalOutboxMessage);
   }

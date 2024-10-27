@@ -122,13 +122,13 @@ public class OrderPaymentSaga implements SagaStep<PaymentResponse> {
   }
 
   private OrderApprovalOutboxMessage getUpdatedApprovalOutboxMessage(UUID sagaId,
-                                                                   OrderStatus orderStatus,
-                                                                   SagaStatus sagaStatus) {
+                                                                     OrderStatus orderStatus,
+                                                                     SagaStatus sagaStatus) {
     Optional<OrderApprovalOutboxMessage> outboxMessageResponse =
         approvalOutboxHelper.getApprovalOutboxMessageBySagaIdAndSagaStatus(
-        sagaId,
-        SagaStatus.COMPENSATING
-    );
+            sagaId,
+            SagaStatus.COMPENSATING
+        );
     if (outboxMessageResponse.isEmpty()) {
       throw new OrderDomainException("Approval outbox message could not be found in " + SagaStatus.COMPENSATING.name() + " status");
     }

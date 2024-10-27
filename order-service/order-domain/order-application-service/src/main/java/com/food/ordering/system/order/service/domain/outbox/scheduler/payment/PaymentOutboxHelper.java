@@ -31,7 +31,8 @@ public class PaymentOutboxHelper {
   }
 
   @Transactional(readOnly = true)
-  public Optional<OrderPaymentOutboxMessage> getPaymentOutboxMessageBySagaIdAndSagaStatus(UUID sagaId, SagaStatus... sagaStatus) {
+  public Optional<OrderPaymentOutboxMessage> getPaymentOutboxMessageBySagaIdAndSagaStatus(UUID sagaId,
+                                                                                          SagaStatus... sagaStatus) {
     return paymentOutboxRepository.findByTypeAndSagaIdAndSagaStatus(ORDER_SAGA_NAME, sagaId, sagaStatus);
   }
 
@@ -41,7 +42,7 @@ public class PaymentOutboxHelper {
     if (outboxMessage == null) {
       log.error("Could not save OrderPaymentOutboxMessage with outbox id: {}", orderPaymentOutboxMessage.getId());
       throw new OrderDomainException("Could not save OrderPaymentOutboxMessage with outbox id: " +
-          orderPaymentOutboxMessage.getId());
+                                         orderPaymentOutboxMessage.getId());
     }
     log.info("OrderPaymentOutboxMessage saved with outbox id: {}", outboxMessage.getId());
   }

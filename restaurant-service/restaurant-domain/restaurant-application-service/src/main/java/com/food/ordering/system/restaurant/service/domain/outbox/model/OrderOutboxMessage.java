@@ -13,17 +13,17 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public class OrderOutboxMessage {
-    private UUID id;
-    private UUID sagaId;
-    private ZonedDateTime createdAt;
-    private ZonedDateTime processedAt;
-    private String type;
-    private String payload;
-    private OutboxStatus outboxStatus;
-    private OrderApprovalStatus approvalStatus;
-    private int version;
+  private UUID id;
+  private UUID sagaId;
+  private ZonedDateTime createdAt;
+  private ZonedDateTime processedAt;
+  private String type;
+  private String payload;
+  private OutboxStatus outboxStatus;
+  private OrderApprovalStatus approvalStatus;
+  private int version;
 
-    public void setOutboxStatus(OutboxStatus status) {
-        this.outboxStatus = status;
-    }
+  public void setOutboxStatus(OutboxStatus status) {
+    this.outboxStatus = status;
+  }
 }

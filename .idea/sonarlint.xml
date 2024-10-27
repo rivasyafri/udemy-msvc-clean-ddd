@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SonarLintProjectSettings">
+    <option name="bindingSuggestionsEnabled" value="false" />
+    <option name="moduleMapping">
+      <map>
+        <entry key="common-data-access" value="common-dataaccess" />
+        <entry key="customer-data-access" value="customer-dataaccess" />
+        <entry key="payment-application-service" value="payment-domain-service" />
+        <entry key="restaurant-data-access" value="restaurant-dataaccess" />
+      </map>
+    </option>
+  </component>
+</project>

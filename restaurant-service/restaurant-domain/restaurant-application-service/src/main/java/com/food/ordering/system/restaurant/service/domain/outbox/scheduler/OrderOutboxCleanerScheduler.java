@@ -15,23 +15,23 @@ import java.util.Optional;
 @Component
 public class OrderOutboxCleanerScheduler implements OutboxScheduler {
 
-    private final OrderOutboxHelper orderOutboxHelper;
+  private final OrderOutboxHelper orderOutboxHelper;
 
-    public OrderOutboxCleanerScheduler(OrderOutboxHelper orderOutboxHelper) {
-        this.orderOutboxHelper = orderOutboxHelper;
-    }
+  public OrderOutboxCleanerScheduler(OrderOutboxHelper orderOutboxHelper) {
+    this.orderOutboxHelper = orderOutboxHelper;
+  }
 
-    @Transactional
-    @Scheduled(cron = "@midnight")
-    @Override
-    public void processOutboxMessage() {
-        Optional<List<OrderOutboxMessage>> outboxMessagesResponse =
-                orderOutboxHelper.getOrderOutboxMessageByOutboxStatus(OutboxStatus.COMPLETED);
-        if (outboxMessagesResponse.isPresent() && !outboxMessagesResponse.get().isEmpty()) {
-            List<OrderOutboxMessage> outboxMessages = outboxMessagesResponse.get();
-            log.info("Received {} OrderOutboxMessage for clean-up!", outboxMessages.size());
-            orderOutboxHelper.deleteOrderOutboxMessageByOutboxStatus(OutboxStatus.COMPLETED);
-            log.info("Deleted {} OrderOutboxMessage!", outboxMessages.size());
-        }
+  @Transactional
+  @Scheduled(cron = "@midnight")
+  @Override
+  public void processOutboxMessage() {
+    Optional<List<OrderOutboxMessage>> outboxMessagesResponse =
+        orderOutboxHelper.getOrderOutboxMessageByOutboxStatus(OutboxStatus.COMPLETED);
+    if (outboxMessagesResponse.isPresent() && !outboxMessagesResponse.get().isEmpty()) {
+      List<OrderOutboxMessage> outboxMessages = outboxMessagesResponse.get();
+      log.info("Received {} OrderOutboxMessage for clean-up!", outboxMessages.size());
+      orderOutboxHelper.deleteOrderOutboxMessageByOutboxStatus(OutboxStatus.COMPLETED);
+      log.info("Deleted {} OrderOutboxMessage!", outboxMessages.size());
     }
+  }
 }

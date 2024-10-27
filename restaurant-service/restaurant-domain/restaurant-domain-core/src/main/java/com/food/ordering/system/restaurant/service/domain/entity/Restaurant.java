@@ -11,9 +11,20 @@ import java.util.List;
 import java.util.UUID;
 
 public class Restaurant extends AggregateRoot<RestaurantId> {
+  private final OrderDetail orderDetail;
   private OrderApproval orderApproval;
   private boolean active;
-  private final OrderDetail orderDetail;
+
+  private Restaurant(Builder builder) {
+    setId(builder.restaurantId);
+    orderApproval = builder.orderApproval;
+    active = builder.active;
+    orderDetail = builder.orderDetail;
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
 
   public void validateOrder(List<String> failureMessages) {
     if (orderDetail.getOrderStatus() != OrderStatus.PAID) {
@@ -22,7 +33,7 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
     Money totalAmount = orderDetail.getProducts().stream().map(product -> {
       if (!product.isAvailable()) {
         failureMessages.add("Product with id: " + product.getId().getValue()
-            + " is not available");
+                                + " is not available");
       }
       return product.getPrice().multiply(product.getQuantity());
     }).reduce(Money.ZERO, Money::add);
@@ -41,21 +52,6 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
         .build();
   }
 
-  public void setActive(boolean active) {
-    this.active = active;
-  }
-
-  private Restaurant(Builder builder) {
-    setId(builder.restaurantId);
-    orderApproval = builder.orderApproval;
-    active = builder.active;
-    orderDetail = builder.orderDetail;
-  }
-
-  public static Builder builder() {
-    return new Builder();
-  }
-
   public OrderApproval getOrderApproval() {
     return orderApproval;
   }
@@ -64,8 +60,22 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
     return active;
   }
 
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
   public OrderDetail getOrderDetail() {
     return orderDetail;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 
   public static final class Builder {
@@ -100,15 +110,5 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
     public Restaurant build() {
       return new Restaurant(this);
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 }

@@ -7,7 +7,8 @@ public class PaymentNotFoundException extends DomainException {
     super(message);
   }
 
-  public PaymentNotFoundException(String message, Throwable cause) {
+  public PaymentNotFoundException(String message,
+                                  Throwable cause) {
     super(message, cause);
   }
 }

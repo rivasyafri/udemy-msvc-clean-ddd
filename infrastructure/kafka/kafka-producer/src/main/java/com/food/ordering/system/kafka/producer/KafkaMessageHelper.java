@@ -7,6 +7,7 @@ import com.food.ordering.system.outbox.OutboxStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.util.function.BiConsumer;
@@ -25,7 +26,7 @@ public class KafkaMessageHelper {
   public <T, U> Function<Throwable, Void> failureCallback(String topicName,
                                                           T avroModel,
                                                           U outboxMessage,
-                                                          BiConsumer<U, OutboxStatus> outboxCallback,
+                                                          @Nullable BiConsumer<U, OutboxStatus> outboxCallback,
                                                           String avroModelName) {
     return throwable -> {
       log.error(
@@ -36,14 +37,16 @@ public class KafkaMessageHelper {
           topicName,
           throwable
       );
-      outboxCallback.accept(outboxMessage, OutboxStatus.FAILED);
+      if (outboxCallback != null) {
+        outboxCallback.accept(outboxMessage, OutboxStatus.FAILED);
+      }
       return null;
     };
   }
 
   public <T, U> Consumer<SendResult<String, T>> successCallback(String orderId,
                                                                 U outboxMessage,
-                                                                BiConsumer<U, OutboxStatus> outboxCallback) {
+                                                                @Nullable BiConsumer<U, OutboxStatus> outboxCallback) {
     return result -> {
       RecordMetadata recordMetadata = result.getRecordMetadata();
       log.info(
@@ -54,11 +57,14 @@ public class KafkaMessageHelper {
           recordMetadata.offset(),
           recordMetadata.timestamp()
       );
-      outboxCallback.accept(outboxMessage, OutboxStatus.COMPLETED);
+      if (outboxCallback != null) {
+        outboxCallback.accept(outboxMessage, OutboxStatus.COMPLETED);
+      }
     };
   }
 
-  public <T> T getOrderEventPayload(String payload, Class<T> outputType) {
+  public <T> T getOrderEventPayload(String payload,
+                                    Class<T> outputType) {
     try {
       return objectMapper.readValue(payload, outputType);
     } catch (JsonProcessingException e) {

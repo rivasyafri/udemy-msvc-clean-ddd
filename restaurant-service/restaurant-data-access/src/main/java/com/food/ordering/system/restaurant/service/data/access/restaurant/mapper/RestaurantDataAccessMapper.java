@@ -30,22 +30,23 @@ public class RestaurantDataAccessMapper {
   public Restaurant restaurantEntityToRestaurant(List<RestaurantEntity> restaurantEntities) {
     RestaurantEntity restaurantEntity =
         restaurantEntities.stream().findFirst().orElseThrow(() ->
-            new RestaurantDataAccessException("No restaurants found!"));
+                                                                new RestaurantDataAccessException("No restaurants " +
+                                                                                                      "found!"));
 
     List<Product> restaurantProducts = restaurantEntities.stream().map(entity ->
-            Product.builder()
-                .productId(new ProductId(entity.getProductId()))
-                .name(entity.getProductName())
-                .price(new Money(entity.getProductPrice()))
-                .available(entity.getProductAvailable())
-                .build())
+                                                                           Product.builder()
+                                                                               .productId(new ProductId(entity.getProductId()))
+                                                                               .name(entity.getProductName())
+                                                                               .price(new Money(entity.getProductPrice()))
+                                                                               .available(entity.getProductAvailable())
+                                                                               .build())
         .collect(Collectors.toList());
 
     return Restaurant.builder()
         .restaurantId(new RestaurantId(restaurantEntity.getRestaurantId()))
         .orderDetail(OrderDetail.builder()
-            .products(restaurantProducts)
-            .build())
+                         .products(restaurantProducts)
+                         .build())
         .active(restaurantEntity.getRestaurantActive())
         .build();
   }

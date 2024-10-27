@@ -8,7 +8,8 @@ public class OrderDomainException extends DomainException {
     super(message);
   }
 
-  public OrderDomainException(String message, Throwable cause) {
+  public OrderDomainException(String message,
+                              Throwable cause) {
     super(message, cause);
   }
 }

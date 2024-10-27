@@ -5,16 +5,10 @@ import id.rivasyafri.learning.domain.value.objects.Money;
 import id.rivasyafri.learning.domain.value.objects.ProductId;
 
 public class Product extends BaseEntity<ProductId> {
+  private final int quantity;
   private String name;
   private Money price;
-  private final int quantity;
   private boolean available;
-
-  public void updateWithConfirmedNamePriceAndAvailability(String name, Money price, boolean available) {
-    this.name = name;
-    this.price = price;
-    this.available = available;
-  }
 
   private Product(Builder builder) {
     setId(builder.productId);
@@ -26,6 +20,14 @@ public class Product extends BaseEntity<ProductId> {
 
   public static Builder builder() {
     return new Builder();
+  }
+
+  public void updateWithConfirmedNamePriceAndAvailability(String name,
+                                                          Money price,
+                                                          boolean available) {
+    this.name = name;
+    this.price = price;
+    this.available = available;
   }
 
   public String getName() {
@@ -42,6 +44,16 @@ public class Product extends BaseEntity<ProductId> {
 
   public boolean isAvailable() {
     return available;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 
   public static final class Builder {
@@ -82,15 +94,5 @@ public class Product extends BaseEntity<ProductId> {
     public Product build() {
       return new Product(this);
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 }

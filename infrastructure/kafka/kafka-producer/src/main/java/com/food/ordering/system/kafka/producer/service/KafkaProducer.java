@@ -8,9 +8,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface KafkaProducer<K extends Serializable, V extends SpecificRecordBase> {
-    void send(String topicName,
-              K key,
-              V message,
-              Consumer<SendResult<K, V>> successCallback,
-              Function<Throwable, Void> failureCallback);
+  void send(String topicName,
+            K key,
+            V message,
+            Consumer<SendResult<K, V>> successCallback,
+            Function<Throwable, Void> failureCallback);
 }

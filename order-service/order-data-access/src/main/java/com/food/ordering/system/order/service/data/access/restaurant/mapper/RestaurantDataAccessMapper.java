@@ -33,7 +33,8 @@ public class RestaurantDataAccessMapper {
         .map(entity -> new Product(
             new ProductId(entity.getProductId()),
             entity.getProductName(),
-            new Money(entity.getProductPrice())))
+            new Money(entity.getProductPrice())
+        ))
         .collect(Collectors.toMap(Function.identity(), Function.identity()));
     return Restaurant.builder()
         .restaurantId(new RestaurantId(restaurantEntity.getRestaurantId()))

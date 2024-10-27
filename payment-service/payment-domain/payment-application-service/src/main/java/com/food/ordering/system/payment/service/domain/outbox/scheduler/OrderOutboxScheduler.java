@@ -45,8 +45,10 @@ public class OrderOutboxScheduler implements OutboxScheduler {
               .map(UUID::toString)
               .collect(Collectors.joining(","))
       );
-      outboxMessages.forEach(outboxMessage -> paymentResponseMessagePublisher.publish(outboxMessage,
-                                                                                      orderOutboxHelper::updateOutboxStatus));
+      outboxMessages.forEach(outboxMessage -> paymentResponseMessagePublisher.publish(
+          outboxMessage,
+          orderOutboxHelper::updateOutboxStatus
+      ));
       log.info("{} OrderOutboxMessage sent to message bus!", outboxMessages.size());
     }
   }

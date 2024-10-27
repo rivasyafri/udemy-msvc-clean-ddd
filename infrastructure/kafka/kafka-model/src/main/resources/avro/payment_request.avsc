@@ -12,8 +12,7 @@
     },
     {
       "name": "sagaId",
-      "type":
-      {
+      "type": {
         "type": "string",
         "logicalType": "uuid"
       }
@@ -53,7 +52,10 @@
       "type": {
         "type": "enum",
         "name": "PaymentOrderStatus",
-        "symbols": ["PENDING", "CANCELLED"]
+        "symbols": [
+          "PENDING",
+          "CANCELLED"
+        ]
       }
     }
   ]

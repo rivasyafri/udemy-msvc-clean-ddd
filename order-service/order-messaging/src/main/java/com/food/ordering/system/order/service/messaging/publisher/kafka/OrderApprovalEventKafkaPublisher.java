@@ -38,8 +38,10 @@ public class OrderApprovalEventKafkaPublisher implements RestaurantApprovalReque
   public void publish(OrderApprovalOutboxMessage orderApprovalOutboxMessage,
                       BiConsumer<OrderApprovalOutboxMessage, OutboxStatus> outboxCallback) {
     OrderApprovalEventPayload eventPayload =
-        kafkaMessageHelper.getOrderEventPayload(orderApprovalOutboxMessage.getPayload(),
-                                                OrderApprovalEventPayload.class);
+        kafkaMessageHelper.getOrderEventPayload(
+            orderApprovalOutboxMessage.getPayload(),
+            OrderApprovalEventPayload.class
+        );
     UUID sagaId = orderApprovalOutboxMessage.getSagaId();
     log.info(
         "Received {} for order id: {} and saga id: {}",

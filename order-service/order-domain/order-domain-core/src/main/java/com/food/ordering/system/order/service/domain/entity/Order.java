@@ -11,17 +11,31 @@ import java.util.List;
 import java.util.Set;
 
 public class Order extends AggregateRoot<OrderId> {
+  public static final String FAILURE_MESSAGE_DELIMITER = ", ";
   private final CustomerId customerId;
   private final RestaurantId restaurantId;
   private final StreetAddress deliveryAddress;
   private final Money price;
   private final Set<OrderItem> items;
-
   private TrackingId trackingId;
   private OrderStatus orderStatus;
   private List<String> failureMessages;
 
-  public static final String FAILURE_MESSAGE_DELIMITER = ", ";
+  private Order(Builder builder) {
+    super.setId(builder.orderId);
+    customerId = builder.customerId;
+    restaurantId = builder.restaurantId;
+    deliveryAddress = builder.deliveryAddress;
+    price = builder.price;
+    items = builder.items;
+    trackingId = builder.trackingId;
+    orderStatus = builder.orderStatus;
+    failureMessages = builder.failureMessages;
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
 
   public void initializeOrder() {
     setId(new OrderId(UUIDv7.randomUUID()));
@@ -95,7 +109,7 @@ public class Order extends AggregateRoot<OrderId> {
 
     if (!price.equals(orderItemsTotal)) {
       throw new OrderDomainException("Total price: " + price.amount() +
-          " is not equal to Order items total: " + orderItemsTotal.amount() + "!"
+                                         " is not equal to Order items total: " + orderItemsTotal.amount() + "!"
       );
     }
   }
@@ -103,8 +117,9 @@ public class Order extends AggregateRoot<OrderId> {
   private void validateItemPrice(OrderItem orderItem) {
     if (!orderItem.isPriceValid()) {
       throw new OrderDomainException("Order item price: " + orderItem.getPrice().amount()
-          + " is not valid for product " + orderItem.getProduct().getId().getValue() + "!"
-          + " Valid price: " + orderItem.getProduct().getPrice().amount());
+                                         + " is not valid for product " + orderItem.getProduct().getId()
+          .getValue() + "!"
+                                         + " Valid price: " + orderItem.getProduct().getPrice().amount());
     }
   }
 
@@ -113,22 +128,6 @@ public class Order extends AggregateRoot<OrderId> {
     for (OrderItem item : items) {
       item.initializeOrderItem(super.getId(), new OrderItemId(itemId++));
     }
-  }
-
-  private Order(Builder builder) {
-    super.setId(builder.orderId);
-    customerId = builder.customerId;
-    restaurantId = builder.restaurantId;
-    deliveryAddress = builder.deliveryAddress;
-    price = builder.price;
-    items = builder.items;
-    trackingId = builder.trackingId;
-    orderStatus = builder.orderStatus;
-    failureMessages = builder.failureMessages;
-  }
-
-  public static Builder builder() {
-    return new Builder();
   }
 
   public CustomerId getCustomerId() {
@@ -161,6 +160,16 @@ public class Order extends AggregateRoot<OrderId> {
 
   public List<String> getFailureMessages() {
     return failureMessages;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 
   public static final class Builder {
@@ -225,15 +234,5 @@ public class Order extends AggregateRoot<OrderId> {
     public Order build() {
       return new Order(this);
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 }

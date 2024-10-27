@@ -37,7 +37,8 @@ public class RestaurantMessagingDataMapper {
   }
 
   public RestaurantApprovalResponseAvroModel
-  orderEventPayloadToRestaurantApprovalResponseAvroModel(UUID sagaId, OrderEventPayload orderEventPayload) {
+  orderEventPayloadToRestaurantApprovalResponseAvroModel(UUID sagaId,
+                                                         OrderEventPayload orderEventPayload) {
     return RestaurantApprovalResponseAvroModel.newBuilder()
         .setId(UUID.randomUUID())
         .setSagaId(sagaId)

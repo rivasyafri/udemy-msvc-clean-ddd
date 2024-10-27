@@ -7,7 +7,8 @@ public class RestaurantApplicationServiceException extends DomainException {
     super(message);
   }
 
-  public RestaurantApplicationServiceException(String message, Throwable cause) {
+  public RestaurantApplicationServiceException(String message,
+                                               Throwable cause) {
     super(message, cause);
   }
 }

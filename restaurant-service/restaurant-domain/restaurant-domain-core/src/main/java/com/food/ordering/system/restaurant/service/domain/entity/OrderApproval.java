@@ -37,6 +37,20 @@ public class OrderApproval extends BaseEntity<OrderApprovalId> {
     return approvalStatus;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+    OrderApproval that = (OrderApproval) o;
+    return Objects.equals(restaurantId, that.restaurantId) && Objects.equals(orderId, that.orderId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), restaurantId, orderId);
+  }
+
   public static final class Builder {
     private OrderApprovalId orderApprovalId;
     private RestaurantId restaurantId;
@@ -69,19 +83,5 @@ public class OrderApproval extends BaseEntity<OrderApprovalId> {
     public OrderApproval build() {
       return new OrderApproval(this);
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    if (!super.equals(o)) return false;
-    OrderApproval that = (OrderApproval) o;
-    return Objects.equals(restaurantId, that.restaurantId) && Objects.equals(orderId, that.orderId);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(super.hashCode(), restaurantId, orderId);
   }
 }
